@@ -32,11 +32,13 @@ namespace ConsoleTests
             //    Thread.Sleep(100);
             //}
 
-            window.Text = "Hello World";
+            //window.Text = "Hello World";
 
+            
             Console.WriteLine("End");
             Console.ReadLine();
 
+            window.Close();
             //notepad_proc.CloseMainWindow();
         }
     }

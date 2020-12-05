@@ -11,6 +11,8 @@ namespace MathCore.WinAPI.Windows
     public class Window
     {
         private static void ThrowLastWin32Error() => Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+        public static IntPtr SendMessage(IntPtr Handle, WM Message, IntPtr wParam, IntPtr lParam) =>
+            User32.SendMessage(Handle, Message, wParam, lParam);
         public static Window[] Find(Func<Window, bool> Selector) 
         {
             var result = new List<Window>();
@@ -61,6 +63,9 @@ namespace MathCore.WinAPI.Windows
         public int Width { get => Rectangle.Width; set => Size = new Size(value, Height); }
 
         public Window(IntPtr Handle) => this.Handle = Handle;
+        public IntPtr SendMessage(WM Message, IntPtr wParam, IntPtr lParam) => SendMessage(Handle, Message, wParam, lParam);
+        public IntPtr SendMessage(WM Message) => SendMessage(Message, IntPtr.Zero, IntPtr.Zero);
+        public IntPtr PostMessage(WM Message, IntPtr wParam, IntPtr lParam) => SendMessage(Handle, Message, wParam, lParam);
         private string GetWindowText() 
         {
             int t = User32.GetWindowTextLength(Handle);
@@ -71,6 +76,29 @@ namespace MathCore.WinAPI.Windows
         }
 
         private bool SetWindowTest(string text) => User32.SetWindowText(Handle, text);
+
+        public void Click()
+        {
+            PostMessage(WM.LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero);
+            PostMessage(WM.LBUTTONUP, IntPtr.Zero, IntPtr.Zero);
+        }
+        public void Click(Point Point) 
+        {
+            var pPoint = GCHandle.Alloc(Point);
+            try
+            {
+                var lParam = GCHandle.ToIntPtr(pPoint);
+                PostMessage(WM.LBUTTONDOWN, IntPtr.Zero, lParam);
+                PostMessage(WM.LBUTTONUP, IntPtr.Zero, lParam);
+            }
+            finally 
+            {
+                pPoint.Free();
+            }
+        }
+
+        public void Click(int X, int Y) => Click(new Point(X, Y));
+        public bool Close() => SendMessage(WM.CLOSE) == IntPtr.Zero;
         
     }
 }
