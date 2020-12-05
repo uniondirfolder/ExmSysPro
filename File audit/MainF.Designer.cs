@@ -1,7 +1,7 @@
 ﻿
 namespace File_audit
 {
-    partial class Form1
+    partial class MainF
     {
         /// <summary>
         /// Обязательная переменная конструктора.

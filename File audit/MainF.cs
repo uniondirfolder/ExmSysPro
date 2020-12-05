@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace File_audit
 {
-    public partial class Form1 : Form
+    public partial class MainF : Form
     {
-        public Form1()
+        public MainF()
         {
             InitializeComponent();
         }
