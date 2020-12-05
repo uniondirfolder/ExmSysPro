@@ -98,6 +98,12 @@ namespace MathCore.WinAPI.Windows
         }
 
         public void Click(int X, int Y) => Click(new Point(X, Y));
+        public bool SetTopMost() => 
+            User32.SetWindowPos(
+                Handle,
+                InsertAfterEnumHWND.TopMost,
+                0, 0, 0, 0,
+                SetWindowPosFlags.IgnoreMove | SetWindowPosFlags.IgnoreResize);
         public bool Close() => SendMessage(WM.CLOSE) == IntPtr.Zero;
         
     }
