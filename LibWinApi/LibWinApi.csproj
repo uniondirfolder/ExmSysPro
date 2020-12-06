@@ -45,9 +45,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppEngine\MonitorHookApplication.cs" />
+    <Compile Include="AppEngine\MonitorHookKeyboard.cs" />
     <Compile Include="Library\Classes\ApplicationHookEvenArgs.cs" />
     <Compile Include="Library\Classes\InterceptKeys.cs" />
     <Compile Include="Library\Classes\KeyboardListener.cs" />
+    <Compile Include="Library\Classes\KeyInfo.cs" />
+    <Compile Include="Library\Classes\KeyInputHookEventArgs.cs" />
     <Compile Include="Library\Classes\QueueHookConcurrentAsync.cs" />
     <Compile Include="Library\Classes\RawKeyEventArgs.cs" />
     <Compile Include="Library\Classes\RawMouseEventArgs.cs" />
@@ -61,6 +65,7 @@
     <Compile Include="Library\Enums\EnumGWLIndex.cs" />
     <Compile Include="Library\Enums\EnumHookFlags.cs" />
     <Compile Include="Library\Enums\EnumKeyEvent.cs" />
+    <Compile Include="Library\Enums\EnumKeyHookEvent.cs" />
     <Compile Include="Library\Enums\EnumShellEvents.cs" />
     <Compile Include="Library\Enums\EnumWindowEvent.cs" />
     <Compile Include="Library\Enums\EnumWindowsStyleEx.cs" />
@@ -81,8 +86,6 @@
     <Compile Include="Library\Structs\StructSHELLHOOKINFO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AppEngine\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
