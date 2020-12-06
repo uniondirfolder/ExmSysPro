@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using LibWinApi.Library.Delegates;
+using LibWinApi.Library.Enums;
 
 namespace LibWinApi.Library.Import
 {
@@ -103,7 +104,7 @@ namespace LibWinApi.Library.Import
         internal static extern bool GetKeyboardState(byte[] lpKeyState);
 
         [DllImport("user32.dll")]
-        internal static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
+        internal static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dWhkl);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         internal static extern IntPtr GetKeyboardLayout(uint dwLayout);
@@ -115,13 +116,19 @@ namespace LibWinApi.Library.Import
         internal static extern uint GetCurrentThreadId();
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, IntPtr hMod, uint dwThreadId);
+        internal static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseProc lPfn, IntPtr hMod, uint dwThreadId);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr CallNextHookEx(IntPtr hHk, int nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, UIntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr CallNextHookEx(IntPtr hHk, int nCode, UIntPtr wParam, IntPtr lParam);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern IntPtr SetWinEventHook(EnumWindowEvent hookMin, EnumWindowEvent hookMax, IntPtr moduleHandle, WinEventProc callback, int processId, int threadId, EnumHookFlags flags);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool UnhookWinEvent(IntPtr hHk);
     }
 }

@@ -52,14 +52,17 @@
     <Compile Include="Library\Classes\RawKeyEventArgs.cs" />
     <Compile Include="Library\Classes\RawMouseEventArgs.cs" />
     <Compile Include="Library\Classes\SyncHookFactory.cs" />
+    <Compile Include="Library\Classes\WindowEventArgs.cs" />
     <Compile Include="Library\Classes\WindowHookHelper.cs" />
     <Compile Include="Library\Classes\WindowInfoObject.cs" />
     <Compile Include="Library\Delegates\DelProcs.cs" />
     <Compile Include="Library\Enums\EnumApplicationEvents.cs" />
     <Compile Include="Library\Enums\EnumGetWindowConstants.cs" />
     <Compile Include="Library\Enums\EnumGWLIndex.cs" />
+    <Compile Include="Library\Enums\EnumHookFlags.cs" />
     <Compile Include="Library\Enums\EnumKeyEvent.cs" />
     <Compile Include="Library\Enums\EnumShellEvents.cs" />
+    <Compile Include="Library\Enums\EnumWindowEvent.cs" />
     <Compile Include="Library\Enums\EnumWindowsStyleEx.cs" />
     <Compile Include="Library\Enums\EnumWindowsStyle.cs" />
     <Compile Include="Library\Enums\EnumWinMsgs.cs" />
@@ -69,6 +72,8 @@
     <Compile Include="Library\Hooks\KeyboardEventHook.cs" />
     <Compile Include="Library\Hooks\MouseEventHook.cs" />
     <Compile Include="Library\Hooks\ShellEventHook.cs" />
+    <Compile Include="Library\Hooks\WindowEventHook.cs" />
+    <Compile Include="Library\Hooks\WindowEventHookEx.cs" />
     <Compile Include="Library\Import\DllUser32.cs" />
     <Compile Include="Library\Structs\StructMSLLHOOKSRTUCT.cs" />
     <Compile Include="Library\Structs\StructPoint.cs" />
