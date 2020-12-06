@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LibWinApi.Library
+﻿
+namespace LibWinApi.Library.Enums
 {
-    internal enum EnumWindowsStyleEx 
+    internal enum EnumWindowsStyleEx
     {
         WS_EX_ACCEPTFILES = 0x00000010,
         WS_EX_APPWINDOW = 0x00040000,

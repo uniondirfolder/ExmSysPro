@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,15 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\DelProcs.cs" />
-    <Compile Include="Library\EnumGetWindowConstants.cs" />
-    <Compile Include="Library\EnumGWLIndex.cs" />
-    <Compile Include="Library\EnumShellEvents.cs" />
-    <Compile Include="Library\EnumWindowsStyleEx.cs" />
-    <Compile Include="Library\EnumWindowsStyle.cs" />
-    <Compile Include="Library\EnumWinMsgs.cs" />
-    <Compile Include="Library\StructRECT.cs" />
+    <Compile Include="Library\Delegates\DelProcs.cs" />
+    <Compile Include="Library\Enums\EnumGetWindowConstants.cs" />
+    <Compile Include="Library\Enums\EnumGWLIndex.cs" />
+    <Compile Include="Library\Enums\EnumShellEvents.cs" />
+    <Compile Include="Library\Enums\EnumWindowsStyleEx.cs" />
+    <Compile Include="Library\Enums\EnumWindowsStyle.cs" />
+    <Compile Include="Library\Enums\EnumWinMsgs.cs" />
+    <Compile Include="Library\Import\DllUser32.cs" />
+    <Compile Include="Library\Structs\StructRECT.cs" />
+    <Compile Include="Library\Structs\StructSHELLHOOKINFO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Library\Hooks\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
