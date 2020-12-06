@@ -9,6 +9,7 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
+            
             var notepad_proc = Process.Start("notepad");
  
             Console.WriteLine("Wait....");

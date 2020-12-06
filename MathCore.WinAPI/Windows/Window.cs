@@ -74,7 +74,6 @@ namespace MathCore.WinAPI.Windows
                 User32.GetWindowText(Handle, buffer, (uint)buffer.Capacity);
             return buffer.ToString();
         }
-
         private bool SetWindowTest(string text) => User32.SetWindowText(Handle, text);
 
         public void Click()
