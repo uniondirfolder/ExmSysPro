@@ -47,11 +47,13 @@
   <ItemGroup>
     <Compile Include="AppEngine\MonitorHookApplication.cs" />
     <Compile Include="AppEngine\MonitorHookKeyboard.cs" />
+    <Compile Include="AppEngine\MonitorHookMouse.cs" />
     <Compile Include="Library\Classes\ApplicationHookEvenArgs.cs" />
     <Compile Include="Library\Classes\InterceptKeys.cs" />
     <Compile Include="Library\Classes\KeyboardListener.cs" />
     <Compile Include="Library\Classes\KeyInfo.cs" />
     <Compile Include="Library\Classes\KeyInputHookEventArgs.cs" />
+    <Compile Include="Library\Classes\MouseHookEventArgs.cs" />
     <Compile Include="Library\Classes\QueueHookConcurrentAsync.cs" />
     <Compile Include="Library\Classes\RawKeyEventArgs.cs" />
     <Compile Include="Library\Classes\RawMouseEventArgs.cs" />

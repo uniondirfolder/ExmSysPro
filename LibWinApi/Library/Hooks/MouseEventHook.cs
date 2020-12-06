@@ -36,7 +36,7 @@ namespace LibWinApi.Library.Hooks
 
             hookStruct = (StructMSLLHOOKSRTUCT)Marshal.PtrToStructure(lParam, typeof(StructMSLLHOOKSRTUCT));
 
-            MouseAction(null, new RawMouseEventArgs { MouseMessage = (EnumWinMsgs)wParam, Point = hookStruct.pt, MouseData = hookStruct.mouseData });
+            MouseAction(null, new RawMouseEventArgs { MouseMessage = (EnumWinMsgs)wParam, Point = hookStruct.pt, MouseInfo = hookStruct.mouseData });
 
             return DllUser32.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }

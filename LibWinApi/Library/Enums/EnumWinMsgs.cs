@@ -209,6 +209,6 @@
         WM_XBUTTONDOWN = 0x020B,
         WM_XBUTTONUP = 0x020C,
         WM_WHEELBUTTONDOWN = 0x207,
-        WM_WHEELBUTTONUP = 0x208,
+        WM_WHEELBUTTONUP = 0x208
     }
 }

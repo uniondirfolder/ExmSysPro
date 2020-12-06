@@ -1,12 +1,14 @@
-﻿using LibWinApi.Library.Enums;
+﻿
+using System;
+using LibWinApi.Library.Enums;
 using LibWinApi.Library.Structs;
 
 namespace LibWinApi.Library.Classes
 {
-    internal class RawMouseEventArgs
+    public class MouseHookEventArgs:EventArgs
     {
         internal EnumWinMsgs MouseMessage { get; set; }
         internal StructPoint Point { get; set; }
-        internal uint MouseInfo { get; set; }
+        public uint MouseInfo { get; set; }
     }
 }
