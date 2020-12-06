@@ -34,28 +34,47 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Library\Classes\ApplicationHookEvenArgs.cs" />
+    <Compile Include="Library\Classes\InterceptKeys.cs" />
+    <Compile Include="Library\Classes\KeyboardListener.cs" />
+    <Compile Include="Library\Classes\QueueHookConcurrentAsync.cs" />
+    <Compile Include="Library\Classes\RawKeyEventArgs.cs" />
+    <Compile Include="Library\Classes\RawMouseEventArgs.cs" />
+    <Compile Include="Library\Classes\SyncHookFactory.cs" />
+    <Compile Include="Library\Classes\WindowHookHelper.cs" />
+    <Compile Include="Library\Classes\WindowInfoObject.cs" />
     <Compile Include="Library\Delegates\DelProcs.cs" />
+    <Compile Include="Library\Enums\EnumApplicationEvents.cs" />
     <Compile Include="Library\Enums\EnumGetWindowConstants.cs" />
     <Compile Include="Library\Enums\EnumGWLIndex.cs" />
+    <Compile Include="Library\Enums\EnumKeyEvent.cs" />
     <Compile Include="Library\Enums\EnumShellEvents.cs" />
     <Compile Include="Library\Enums\EnumWindowsStyleEx.cs" />
     <Compile Include="Library\Enums\EnumWindowsStyle.cs" />
     <Compile Include="Library\Enums\EnumWinMsgs.cs" />
+    <Compile Include="Library\Hooks\ClipBoardEventHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Library\Hooks\KeyboardEventHook.cs" />
+    <Compile Include="Library\Hooks\MouseEventHook.cs" />
+    <Compile Include="Library\Hooks\ShellEventHook.cs" />
     <Compile Include="Library\Import\DllUser32.cs" />
+    <Compile Include="Library\Structs\StructMSLLHOOKSRTUCT.cs" />
+    <Compile Include="Library\Structs\StructPoint.cs" />
     <Compile Include="Library\Structs\StructRECT.cs" />
     <Compile Include="Library\Structs\StructSHELLHOOKINFO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Library\Hooks\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
