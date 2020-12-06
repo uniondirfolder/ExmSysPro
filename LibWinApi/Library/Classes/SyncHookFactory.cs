@@ -21,19 +21,19 @@ namespace LibWinApi.Library.Classes
     }
     internal class SyncHookFactory: IDisposable
     {
-        private readonly Lazy<MessageHandler> messageHandler;
-        private readonly Lazy<TaskScheduler> scheduler;
-        private bool hasUIThread;
+        private readonly Lazy<MessageHandler> _messageHandler;
+        private readonly Lazy<TaskScheduler> _scheduler;
+        private bool _hasUiThread;
         internal SyncHookFactory()
         {
-            scheduler = new Lazy<TaskScheduler>(() =>
+            _scheduler = new Lazy<TaskScheduler>(() =>
             {
                 var dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
                 if (dispatcher != null)
                 {
                     if (SynchronizationContext.Current != null)
                     {
-                        hasUIThread = true;
+                        _hasUiThread = true;
                         return TaskScheduler.FromCurrentSynchronizationContext();
                     }
                 }
@@ -58,7 +58,7 @@ namespace LibWinApi.Library.Classes
                 return Volatile.Read(ref current);
             });
 
-            messageHandler = new Lazy<MessageHandler>(() =>
+            _messageHandler = new Lazy<MessageHandler>(() =>
             {
                 MessageHandler msgHandler = null;
                 new Task(e => { Volatile.Write(ref msgHandler, new MessageHandler()); }, GetTaskScheduler()).Start();
@@ -73,9 +73,9 @@ namespace LibWinApi.Library.Classes
         }
         public void Dispose()
         {
-            if (messageHandler?.Value != null)
+            if (_messageHandler?.Value != null)
             {
-                messageHandler.Value.DestroyHandle();
+                _messageHandler.Value.DestroyHandle();
             }
         }
         private void Initialize()
@@ -85,13 +85,13 @@ namespace LibWinApi.Library.Classes
         }
         internal TaskScheduler GetTaskScheduler()
         {
-            return scheduler.Value;
+            return _scheduler.Value;
         }
         internal IntPtr GetHandle()
         {
-            var handle = IntPtr.Zero;
+            IntPtr handle;
 
-            if (hasUIThread)
+            if (_hasUiThread)
             {
                 try
                 {
@@ -104,10 +104,11 @@ namespace LibWinApi.Library.Classes
                 }
                 catch
                 {
+                    //nothing
                 }
             }
 
-            return messageHandler.Value.Handle;
+            return _messageHandler.Value.Handle;
         }
     }
 }

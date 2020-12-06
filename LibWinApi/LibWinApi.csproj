@@ -46,9 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppEngine\MonitorHookApplication.cs" />
+    <Compile Include="AppEngine\MonitorHookClipboard.cs" />
     <Compile Include="AppEngine\MonitorHookKeyboard.cs" />
     <Compile Include="AppEngine\MonitorHookMouse.cs" />
     <Compile Include="Library\Classes\ApplicationHookEvenArgs.cs" />
+    <Compile Include="Library\Classes\CliboardHookEventArgs.cs" />
     <Compile Include="Library\Classes\InterceptKeys.cs" />
     <Compile Include="Library\Classes\KeyboardListener.cs" />
     <Compile Include="Library\Classes\KeyInfo.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Library\Classes\WindowInfoObject.cs" />
     <Compile Include="Library\Delegates\DelProcs.cs" />
     <Compile Include="Library\Enums\EnumApplicationEvents.cs" />
+    <Compile Include="Library\Enums\EnumClipboardContentTypes.cs" />
     <Compile Include="Library\Enums\EnumGetWindowConstants.cs" />
     <Compile Include="Library\Enums\EnumGWLIndex.cs" />
     <Compile Include="Library\Enums\EnumHookFlags.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="Library\Structs\StructPoint.cs" />
     <Compile Include="Library\Structs\StructRECT.cs" />
     <Compile Include="Library\Structs\StructSHELLHOOKINFO.cs" />
+    <Compile Include="MonitorHookFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
