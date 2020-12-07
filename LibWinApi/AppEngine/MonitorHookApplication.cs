@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using LibWinApi.Library.Classes;
 using LibWinApi.Library.Enums;
 using LibWinApi.Library.Hooks;
+using LibWinApi.Library.Import;
 
 namespace LibWinApi.AppEngine
 {
@@ -33,7 +35,7 @@ namespace LibWinApi.AppEngine
         private void ApplicationStatus(WindowInfoObject wio, EnumApplicationEvents appEvent)
         {
             var timeStamp = DateTime.Now;
-
+            
             wio.AppTitle = appEvent == EnumApplicationEvents.CLOSED ? wio.AppTitle : WindowHookHelper.GetWindowText(wio.HWnd);
             wio.AppPath = appEvent == EnumApplicationEvents.CLOSED ? wio.AppPath : WindowHookHelper.GetAppPath(wio.HWnd);
             wio.AppName = appEvent == EnumApplicationEvents.CLOSED ? wio.AppName : WindowHookHelper.GetAppDescription(wio.AppPath);

@@ -3,7 +3,7 @@
     /// <summary>
     /// Повідомлення про події Windows, надіслані до WindowProc
     /// </summary>
-    internal enum EnumWinMsgs
+    public enum EnumWinMsgs
     {
         WM_ACTIVATE = 0x0006,
         WM_ACTIVATEAPP = 0x001C,

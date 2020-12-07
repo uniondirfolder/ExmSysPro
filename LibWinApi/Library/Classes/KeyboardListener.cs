@@ -56,7 +56,7 @@ namespace LibWinApi.Library.Classes
         {
             switch (keyEvent)
             {
-                // KeyDown events
+             
                 case Enums.EnumKeyEvent.WM_KEYDOWN:
                     if (KeyDown != null)
                     {
@@ -74,7 +74,7 @@ namespace LibWinApi.Library.Classes
 
                     break;
 
-                // KeyUp events
+
                 case Enums.EnumKeyEvent.WM_KEYUP:
                     if (KeyUp != null)
                     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using LibWinApi.Library.Classes;
 using LibWinApi.Library.Delegates;
@@ -16,9 +17,14 @@ namespace LibWinApi.Library.Hooks
         private readonly LowLevelMouseProc _mouseProc;
         internal event EventHandler<RawMouseEventArgs> MouseAction = delegate { };
 
+        public MouseEventHook()
+        {
+            _mouseProc = HookCallBack;
+        }
         private static IntPtr SetHook(LowLevelMouseProc mouseProc)
         {
             var hook = DllUser32.SetWindowsHookEx(WH_MOUSE_LL, mouseProc, DllUser32.GetModuleHandle("user32"), 0);
+
             if (hook == IntPtr.Zero)
             {
                 throw new Win32Exception();
@@ -26,7 +32,7 @@ namespace LibWinApi.Library.Hooks
 
             return hook;
         }
-        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        private  IntPtr HookCallBack(int nCode, IntPtr wParam, IntPtr lParam)
         {
             StructMSLLHOOKSRTUCT hookStruct;
             if (nCode < 0)

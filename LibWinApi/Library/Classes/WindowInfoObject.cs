@@ -1,4 +1,5 @@
 ﻿using System;
+using LibWinApi.Library.Import;
 
 namespace LibWinApi.Library.Classes
 {
@@ -6,14 +7,11 @@ namespace LibWinApi.Library.Classes
     {
         public IntPtr HWnd;
         public int EventType;
-        private string _appPath;
 
-        public string AppPath
-        {
-            get => _appPath;
-            set => _appPath = value;
-        }
+        public string AppPath { get; set; }
         public string AppName { get; set; }
         public string AppTitle { get; set; }
+
+       
     }
 }

@@ -23,7 +23,7 @@ namespace LibWinApi.Library.Classes
         {
             if (hWnd == IntPtr.Zero)
             {
-                return null;
+                return "empty handle";
             }
 
             try
@@ -32,10 +32,11 @@ namespace LibWinApi.Library.Classes
                 DllUser32.GetWindowThreadProcessId(hWnd, out pid);
                 var proc = Process.GetProcessById((int)pid);
                 return proc.MainModule.FileName;
+                
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                return "empty handle";
             }
         }
         internal static string GetWindowText(IntPtr hWnd)
@@ -49,7 +50,7 @@ namespace LibWinApi.Library.Classes
             }
             catch (Exception)
             {
-                return null;
+                return "err-get-TxtWin";
             }
         }
         internal static string GetAppDescription(string appPath)

@@ -11,11 +11,11 @@ namespace LibWinApi.Library.Delegates
 
     internal delegate IntPtr LowLevelKeyboardProc(int nCode, UIntPtr wParam, IntPtr lParam);
 
+    internal delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
+
     internal delegate void RawKeyEventHandler(object sender, RawKeyEventArgs args);
 
     internal delegate void KeyboardCallbackAsync(EnumKeyEvent keyEvent, int vkCode, string character);
-
-    internal delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 
     internal delegate void GeneralShellHookEventHandler(ShellEventHook sender, IntPtr hWnd);
 
