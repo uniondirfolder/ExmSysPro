@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LibWinApi\LibWinApi.csproj" />
     <ProjectReference Include="..\MathCore.WinAPI\MathCore.WinAPI.csproj" />
   </ItemGroup>
 
