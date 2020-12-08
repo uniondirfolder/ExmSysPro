@@ -19,9 +19,10 @@ namespace ConsoleTestLibWinApi
 
             //var kOM = monitorHookFactory.GetKeyboardObserver();
             //kOM.Start();
-            //kOM.OnKeyInput += (s, e) => 
+            //kOM.OnKeyInput += (s, e) =>
             //    { Console.WriteLine($"Key{e.Key.EventType} event of key{e.Key.KeyName}"); };
             //Thread.Sleep(1000);
+
             //var mOM = monitorHookFactory.GetMouseObserver();
             //mOM.Start();
             //mOM.OnMouseInput += (s, e) =>
@@ -37,17 +38,18 @@ namespace ConsoleTestLibWinApi
                     e.DataFormat.ToString());
             };
 
-            var aOM = monitorHookFactory.GetApplicationObserver();
-            aOM.Start();
-            aOM.OnAppWindowChange += (s, e) =>
-            {
-                Console.WriteLine("Application '{0}' window of '{1}' with the title '{2}' was {3}",
-                    e.WindowInfo.AppPath,e.WindowInfo.AppName, e.WindowInfo.AppTitle, e.Events);
-            };
+            //var aOM = monitorHookFactory.GetApplicationObserver();
+            //aOM.Start();
+            //aOM.OnAppWindowChange += (s, e) =>
+            //{
+            //    Console.WriteLine("Application '{0}' window of '{1}' with the title '{2}' was {3}",
+            //        e.WindowInfo.AppPath,e.WindowInfo.AppName, e.WindowInfo.AppTitle, e.Events);
+            //};
             Console.Read();
             //kOM.Stop();
             //mOM.Stop();
-            //cOM.Stop();
+            cOM.Stop();
+            //aOM.Stop();
         }
     }
 }

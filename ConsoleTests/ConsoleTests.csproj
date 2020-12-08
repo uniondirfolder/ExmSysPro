@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibWinApi\LibWinApi.csproj" />
-    <ProjectReference Include="..\MathCore.WinAPI\MathCore.WinAPI.csproj" />
+    <ProjectReference Include="..\MathCore.WinAPI\SomeWinAPI.csproj" />
   </ItemGroup>
 
 </Project>

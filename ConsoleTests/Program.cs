@@ -10,40 +10,40 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            
-            //var notepad_proc = Process.Start("notepad");
- 
-            //Console.WriteLine("Wait....");
-            //Console.ReadLine();
 
-            ////var notepad = Window.Find(w => w.Text.EndsWith("Блокнот"));
-            ////foreach (var w in notepad)
-            ////{
-            ////    w.Text = "235";
-            ////}
+            var notepad_proc = Process.Start("notepad");
 
-            //var main_window_hWnd = notepad_proc.MainWindowHandle;
-            //var window = new Window(main_window_hWnd);
+            Console.WriteLine("Wait....");
+            Console.ReadLine();
 
-            //Console.WriteLine("Text window = {0}", window.Text);
-            //Console.WriteLine("Coord window = {0}", window.Rectangle);
+            //var notepad = Window.Find(w => w.Text.EndsWith("Блокнот"));
+            //foreach (var w in notepad)
+            //{
+            //    w.Text = "235";
+            //}
 
-            ////for (var i = window.X; i < 365; i+=10)
-            ////{
-            ////    window.X = i;
-            ////    Thread.Sleep(100);
-            ////}
+            var main_window_hWnd = notepad_proc.MainWindowHandle;
+            var window = new Window(main_window_hWnd);
 
-            ////window.Text = "Hello World";
+            Console.WriteLine("Text window = {0}", window.Text);
+            Console.WriteLine("Coord window = {0}", window.Rectangle);
 
-            
-            //Console.WriteLine("End");
-            //Console.ReadLine();
+            for (var i = window.X; i < 365; i += 10)
+            {
+                window.X = i;
+                Thread.Sleep(100);
+            }
 
-            //window.Close();
-            //notepad_proc.CloseMainWindow();
+            window.Text = "Hello World";
 
-           
+
+            Console.WriteLine("End");
+            Console.ReadLine();
+
+            window.Close();
+            notepad_proc.CloseMainWindow();
+
+
         }
     }
 }

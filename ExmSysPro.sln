@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileAudit", "File audit\FileAudit.csproj", "{A8F8CC6A-4BD6-448A-A2F8-B1B6A1A1AEEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileAuditWF", "File audit\FileAuditWF.csproj", "{A8F8CC6A-4BD6-448A-A2F8-B1B6A1A1AEEF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keylogger", "Keylogger\Keylogger.csproj", "{07A7B2C0-223F-47DF-BF59-071318239FBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.WinAPI", "MathCore.WinAPI\MathCore.WinAPI.csproj", "{899FD619-A6BD-44FB-A201-CCC0DE44F9DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SomeWinAPI", "MathCore.WinAPI\SomeWinAPI.csproj", "{899FD619-A6BD-44FB-A201-CCC0DE44F9DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1BEABF59-5EBA-4791-99C1-F228D8AE21FE}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWinApi", "LibWinApi\LibWinApi.csproj", "{8A5D98EA-F434-4F14-988D-B0DB70BFEF9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestLibWinApi", "ConsoleTestLibWinApi\ConsoleTestLibWinApi.csproj", "{8C24E98A-EB80-4ACE-8FC2-A7511CE7B7B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibFileAudit", "LibFileAudit\LibFileAudit.csproj", "{1E496441-69B3-418F-87C1-F4CECB63D9F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{8C24E98A-EB80-4ACE-8FC2-A7511CE7B7B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C24E98A-EB80-4ACE-8FC2-A7511CE7B7B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C24E98A-EB80-4ACE-8FC2-A7511CE7B7B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E496441-69B3-418F-87C1-F4CECB63D9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E496441-69B3-418F-87C1-F4CECB63D9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E496441-69B3-418F-87C1-F4CECB63D9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E496441-69B3-418F-87C1-F4CECB63D9F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
