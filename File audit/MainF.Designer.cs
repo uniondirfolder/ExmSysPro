@@ -42,6 +42,7 @@ namespace File_audit
             this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
             this.contextMenuStrip_ListWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsm_DeleteFromList = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.groupBox_Properties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
@@ -148,6 +149,7 @@ namespace File_audit
             // 
             // splitContainer_Main.Panel1
             // 
+            this.splitContainer_Main.Panel1.Controls.Add(this.buttonStart);
             this.splitContainer_Main.Panel1.Controls.Add(this.groupBox_Properties);
             this.splitContainer_Main.Size = new System.Drawing.Size(800, 450);
             this.splitContainer_Main.SplitterDistance = 295;
@@ -163,9 +165,19 @@ namespace File_audit
             // tsm_DeleteFromList
             // 
             this.tsm_DeleteFromList.Name = "tsm_DeleteFromList";
-            this.tsm_DeleteFromList.Size = new System.Drawing.Size(180, 22);
+            this.tsm_DeleteFromList.Size = new System.Drawing.Size(163, 22);
             this.tsm_DeleteFromList.Text = "Вилучити слово";
             this.tsm_DeleteFromList.Click += new System.EventHandler(this.tsm_DeleteFromList_Click);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(17, 240);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(75, 23);
+            this.buttonStart.TabIndex = 2;
+            this.buttonStart.Text = "button_Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // MainF
             // 
@@ -201,6 +213,7 @@ namespace File_audit
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_ListWords;
         private System.Windows.Forms.ToolStripMenuItem tsm_DeleteFromList;
+        private System.Windows.Forms.Button buttonStart;
     }
 }
 

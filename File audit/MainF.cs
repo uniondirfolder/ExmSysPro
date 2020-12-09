@@ -70,5 +70,18 @@ namespace File_audit
                 }
             }
         }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            List<string> strs = new List<string>();
+            foreach (var variable in listBox_UserWordsManual.Items)
+            {
+                strs.Add(variable.ToString());
+            }
+            var frm = new FormSearch(comboBox_DiskInfo.SelectedItem.ToString(),strs.ToArray());
+            frm.Show();
+        }
+
+        
     }
 }
