@@ -73,13 +73,21 @@ namespace File_audit
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            List<string> strs = new List<string>();
-            foreach (var variable in listBox_UserWordsManual.Items)
+            if (listBox_UserWordsManual.Items.Count > 0)
             {
-                strs.Add(variable.ToString());
+                List<string> strs = new List<string>();
+                foreach (var variable in listBox_UserWordsManual.Items)
+                {
+                    strs.Add(variable.ToString());
+                }
+
+                var frm = new FormSearch(comboBox_DiskInfo.SelectedItem.ToString(), strs.ToArray());
+                frm.Show();
             }
-            var frm = new FormSearch(comboBox_DiskInfo.SelectedItem.ToString(),strs.ToArray());
-            frm.Show();
+            else
+            {
+                MessageBox.Show("Список слів для пошуку порожній!");
+            }
         }
 
         

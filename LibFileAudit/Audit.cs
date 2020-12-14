@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -8,13 +9,24 @@ using System.Threading.Tasks;
 
 namespace LibFileAudit
 {
-
+    
     public class Audit
     {
+        public enum FileSizeInBit:long
+        {
+            GBbi=1_073_741_824,
+            GBbt=8_589_934_592,
+            MBbi=1_048_576,
+            MBbt =8_388_608,
+            KBbi = 1_024,
+            KBbt = 8_192,
+            Byte =8
+        }
         static readonly object LockerDir = new object();
-
+        private static bool ScanDirEnd = false;
         public static List<AuditInfo> AuditValid(string[] arrWord, FileInfo fi)
         {
+            //Debug.WriteLine(fi.Name);
             List<AuditInfo> ret = new List<AuditInfo>();
             if (arrWord == null || fi == null)
                 return ret;
@@ -52,45 +64,141 @@ namespace LibFileAudit
                     ret.Clear();
                 return ret;
             }
-
+            //Debug.WriteLine(fi.Name);
             return ret;
         }
-
-        public static List<DirectoryInfo> ScanDirsOnDisk(string diskRoot, CancellationToken ct, UpdateUiSearchForm del)
+        private  void AuditValidTwo(object obj)
         {
 
-            CancellationToken _ct = ct;
-            UpdateUiSearchForm _del = del;
+    
+                Msg msg = (Msg)obj;
+                List<AuditInfo> ret = new List<AuditInfo>();
 
-            List<DirectoryInfo> listDir = new List<DirectoryInfo>();
-            if (diskRoot == null)
-                return listDir;
+     
+                    try
+                    {
+                        var file = File.ReadAllBytes(msg.FileInfo.FullName);
+                        for (int i = 0; i < msg.BadWords.Length; i++)
+                        {
+                            var word = Encoding.Unicode.GetBytes(msg.BadWords[i]);
+                            int numOfcoincs = 0;
+                            for (int indxUp = word.Length; indxUp < file.Length; indxUp++)
+                            {
+                                if (file[indxUp] == word[0])
+                                {
+                                    bool find = true;
+                                    for (int indxL = indxUp - word.Length + 1, indxArr = 1; indxL < indxUp; indxL++, indxArr++)
+                                    {
+                                        if (word[indxArr] == file[indxL])
+                                            continue;
+                                        find = false;
+                                        break;
+                                    }
+
+                                    if (find)
+                                        numOfcoincs++;
+                                }
+                            }
+
+                            ret.Add(new AuditInfo() { Count = numOfcoincs, WordIndexArr = i });
+                        }
+                        msg.ListSfi.Add(new SearchFileInfo() { FileInfo = msg.FileInfo, FindWords = ret });
+
+                    }
+                    catch
+                    {
+                        //
+                    }
+
+                
+            
+
+        }
+        private static void AuditValid(object obj)
+        {
+
+            lock (LockerDir)
+            {
+                Msg msg = (Msg)obj;
+                List<AuditInfo> ret = new List<AuditInfo>();
+
+                if (msg.BadWords != null && msg.FileInfo != null && msg.ListSfi != null && !msg.CancellationToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var file = File.ReadAllBytes(msg.FileInfo.FullName);
+                        for (int i = 0; i < msg.BadWords.Length; i++)
+                        {
+                            var word = Encoding.Unicode.GetBytes(msg.BadWords[i]);
+                            int numOfcoincs = 0;
+                            for (int indxUp = word.Length; indxUp < file.Length; indxUp++)
+                            {
+                                if (file[indxUp] == word[0])
+                                {
+                                    bool find = true;
+                                    for (int indxL = indxUp - word.Length + 1, indxArr = 1; indxL < indxUp; indxL++, indxArr++)
+                                    {
+                                        if (word[indxArr] == file[indxL])
+                                            continue;
+                                        find = false;
+                                        break;
+                                    }
+
+                                    if (find)
+                                        numOfcoincs++;
+                                }
+                            }
+
+                            ret.Add(new AuditInfo() { Count = numOfcoincs, WordIndexArr = i });
+                        }
+                        msg.ListSfi.Add(new SearchFileInfo() { FileInfo = msg.FileInfo, FindWords = ret });
+                       
+                    }
+                    catch 
+                    {
+                        //
+                    }
+
+                }
+            }
+            
+        }
+        public static void ScanDirsAggressively(object obj)
+        {
+            Msg msg = (Msg) obj;
+
+                ScanDirEnd = false;
+            
+
             try
             {
-                var dir = new DirectoryInfo(diskRoot);
+                var dir = new DirectoryInfo(msg.Disk);
+                msg.ListDir.Add(dir);
 
-                listDir.AddRange(dir.EnumerateDirectories());
+                    msg.ListDir.AddRange(dir.EnumerateDirectories());
+                
+                
             }
-            catch (Exception e)
+            catch 
             {
                 //ACL except
             }
 
-            if (listDir.Count > 0)
+            if (msg.ListDir.Count > 0)
             {
 
                 int i = 1;
-                for (; i < listDir.Count && !_ct.IsCancellationRequested;)
+                for (; i < msg.ListDir.Count && !msg.CancellationToken.IsCancellationRequested;)
                 {
                     try
                     {
-                        int countTh = listDir.Count - i > 100 ? 100 : listDir.Count - i;
+                        int countTh = msg.ListDir.Count - i > 10 ? 10 : msg.ListDir.Count - i;
                         Thread[] myPool = new Thread[countTh];
                         for (int j = 0; j < countTh; j++)
                         {
 
                             myPool[j] = new Thread(ThreadTaskDirSearch);
-                            myPool[j].Start(new Msg() {ListDir = listDir, Index = i, UpdateUiSearchForm = _del});
+                            myPool[j].Start(new Msg() {ListDir = msg.ListDir, Index = i, UpdateUiSearchForm = msg.UpdateUiSearchForm});
                             i++;
                         }
 
@@ -105,7 +213,7 @@ namespace LibFileAudit
 
                             if (countLiveThr == 0)
                                 break;
-                            if (_ct.IsCancellationRequested)
+                            if (msg.CancellationToken.IsCancellationRequested)
                             {
                                 for (int j = 0; j < countTh; j++)
                                 {
@@ -116,56 +224,53 @@ namespace LibFileAudit
                                 break;
                             }
 
-                            Thread.Sleep(100);
+                            Thread.Sleep(20);
                         }
 
                         lock (LockerDir)
                         {
-                            for (int j = i; j < listDir.Count - countTh; j++, i++)
+                            for (int j = i; j < msg.ListDir.Count - countTh; j++, i++)
                             {
-                                Msg m = new Msg() {ListDir = listDir, Index = i, UpdateUiSearchForm = _del};
+                                Msg m = new Msg() {ListDir = msg.ListDir, Index = i, UpdateUiSearchForm = msg.UpdateUiSearchForm};
                                 ThreadPool.QueueUserWorkItem(ThreadTaskDirSearch, m);
+                                
                             }
-
-                            _del(new Msg() {CurrentDirectory = listDir[i].FullName, Index = i});
+                            msg.UpdateUiSearchForm(new Msg() { CurrentDirectory = msg.ListDir[i].FullName, Index = i });
                         }
-
-
-                        //di.AddRange(di[i].EnumerateDirectories());
-                        //_del(new Msg(){CurrentDirectory = di[i].FullName});
                     }
-                    catch (Exception e)
+                    catch 
                     {
                         //ACL except
                     }
 
-
                 }
 
-                _del(new Msg() {CurrentDirectory = $"Завершено {i}"});
+                msg.UpdateUiSearchForm(new Msg() { CurrentDirectory = "Виконано", Index = i });
             }
 
-            return listDir;
-        }
-
-        static void ThreadTaskDirSearch(object obj)
-        {
             lock (LockerDir)
             {
-                Msg m = (Msg) obj;
+                ScanDirEnd = true;
+            }
+
+        }
+        static void ThreadTaskDirSearch(object obj)
+        {
+            Msg m = (Msg)obj;
+            lock (LockerDir)
+            {
                 try
                 {
-                    if (m.ListDir != null)
-                    {
-                        m.ListDir.AddRange(m.ListDir[m.Index].EnumerateDirectories());
-                    }
+                    var t = m.ListDir[m.Index].EnumerateDirectories();
+                    m.ListDir.AddRange(t);
+                    
                 }
-                catch (Exception e)
+                catch
                 {
-
                     //ACL except
                 }
             }
+            
         }
 
         public static List<string> GetWordsFromString(string text)
@@ -199,8 +304,12 @@ namespace LibFileAudit
             return ret;
         }
 
-        public void ScanDir(object obj)
+        public static void ScanDirsLight(object obj)
         {
+            lock (LockerDir)
+            {
+                ScanDirEnd = false;
+            }
             Msg m = (Msg) obj;
             if (m.Disk == null || m.UpdateUiSearchForm == null || m.ListDir == null)
                 return;
@@ -213,6 +322,7 @@ namespace LibFileAudit
             }
             catch (Exception e)
             {
+                
                 //ACL except
             }
 
@@ -224,7 +334,7 @@ namespace LibFileAudit
                     lock (LockerDir)
                     {
                         int s = i + 50;
-                        for (int j = i; j < m.ListDir.Count && j<s; j++)
+                        for (int j = i; j < m.ListDir.Count && j<s; j++, i++)
                         {
                             m.ListDir.AddRange(m.ListDir[i].EnumerateDirectories());
                         }
@@ -232,7 +342,7 @@ namespace LibFileAudit
 
                     m.UpdateUiSearchForm(new Msg() { CurrentDirectory = m.ListDir[i].FullName, Index = i });
                 }
-                catch (Exception e)
+                catch 
                 {
                     //ACL except
                 }
@@ -240,56 +350,185 @@ namespace LibFileAudit
                 Thread.Sleep(2);
             }
 
-            m.UpdateUiSearchForm(new Msg() {CurrentDirectory = "Завершено", Index = i});
+            lock (LockerDir)
+            {
+                ScanDirEnd = true;
+            }
+            m.UpdateUiSearchForm(new Msg() {CurrentDirectory = "Виконано", Index = i});
         }
 
-        public void ScanFiles(object obj)
+        public static void ScanFilesAggressively(object obj)
         {
             Msg m = (Msg)obj;
             if (m.UpdateUiSearchForm == null || m.ListSfi == null || m.ListDir == null)
                 return;
             int i = 0;
-            try
-            {
-                while (true)
-                {
-                    FileInfo[] fi = null;
-                    lock (LockerDir)
-                    {
-                        if (i < m.ListDir.Count)
-                        {
-                            fi = m.ListDir[i].GetFiles("*.*");
-                        }
-                    }
 
-                    if (i < m.ListDir.Count && fi != null)
+            while (true)
+            {
+                FileInfo[] fi = null;
+                lock (LockerDir)
+                {
+
+                    if (i < m.ListDir.Count)
                     {
-                        i++;
-                        for (int j = 0; j < fi.Length && !m.CancellationToken.IsCancellationRequested; j++)
+                        try
+                        {
+                            fi = m.ListDir[i].GetFiles();
+                        }
+                        catch 
+                        {
+                            //
+                        }
+
+                    }
+                }
+
+                if (fi != null)
+                {
+
+                    for (int j = 0; j < fi.Length && !m.CancellationToken.IsCancellationRequested; j++)
+                    {
+                        if (m.FileSizeBr > fi[j].Length)
                         {
                             SearchFileInfo sfi = new SearchFileInfo();
                             sfi.FileInfo = fi[j];
 
                             Task<List<AuditInfo>> task =
                                 new Task<List<AuditInfo>>(() => AuditValid(m.BadWords, sfi.FileInfo));
+
                             task.Start();
-                            task.Wait(m.CancellationToken);
-                            sfi.FindWords = task.Result;
-                            m.ListSfi.Add(sfi);
+
+                            try
+                            {
+                                task.Wait(m.CancellationToken);
+                                sfi.FindWords = task.Result;
+                                lock (LockerDir)
+                                {
+                                    m.ListSfi.Add(sfi);
+                                }
+
+                                m.UpdateUiSearchForm(new Msg() { PrgBarFiles = i, CurrentFile = fi[j].Name });
+                            }
+                            catch
+                            {
+                                //
+                            }
+
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
-                    m.UpdateUiSearchForm(new Msg(){PrgBarFiles = i});
                 }
-
+                
+                if (i == m.ListDir.Count && ScanDirEnd)
+                    break;
+                i++;
             }
-            catch (Exception e)
+
+            m.UpdateUiSearchForm(new Msg() {CurrentFile = "Виконано", PrgBarFiles = i});
+        }
+
+        public static void ScanFileLight(object obj)
+        {
+            Msg m = (Msg)obj;
+            if (m.UpdateUiSearchForm == null || m.ListSfi == null || m.ListDir == null)
+                return;
+            int i = 0;
+            int countTh = 15;
+            if (m.ListDir.Count > 0)
             {
-                Console.WriteLine(e);
-                throw;
+                Thread[] myPool = null;
+                FileInfo[] fi = null;
+                List<int> indexs = new List<int>();
+                Audit a= new Audit();
+                while (true)
+                {
+                    lock (LockerDir)
+                    {
+                        try
+                        {
+                            fi = m.ListDir[i].GetFiles();
+                            if (fi.Length > 0)
+                            {
+                                int r = 0;
+                                for (int j = 0; j < fi.Length; j++)
+                                {
+                                    if (fi.Length < m.FileSizeBr)
+                                        indexs.Add(j);
+                                }
+                                var s = indexs.Count > countTh ? countTh : indexs.Count;
+                                myPool = new Thread[s];
+                                for (int j = 0; j < s; j++)
+                                {
+                                    myPool[j] = new Thread(a.AuditValidTwo);
+                                    myPool[j].Start(new Msg() {BadWords = m.BadWords, FileInfo =fi[indexs[0]] , ListSfi = m.ListSfi, CancellationToken = m.CancellationToken});
+                                    m.UpdateUiSearchForm(new Msg() {PrgBarFiles = i, CurrentFile = fi[indexs[0]].Name });
+                                    indexs.RemoveAt(0);
+                                }
+                            }
+                            else
+                            {
+                                fi = null;
+                                goto Incr;
+                                
+                            }
+                        }
+                        catch
+                        {
+                            fi = null;
+                            goto Incr;
+                        }
+
+                    }
+
+                    if (myPool != null)
+                    {
+
+                        for (int j = 0; j < myPool.Length;)
+                        {
+                            if (myPool[j].IsAlive)
+                                j = 0;
+                            else
+                            {
+                                j++;
+                            }
+
+                            Thread.Sleep(20);
+                        }
+
+                        if (m.CancellationToken.IsCancellationRequested)
+                        {
+                            for (int j = 0; j < myPool.Length; j++)
+                            {
+                                if (myPool[j].IsAlive) myPool[j].Abort();
+                            }
+
+                        }
+                    }
+
+                    try
+                    {
+
+                        while (indexs.Count != 0)
+                        {
+                            Msg _m = new Msg() {BadWords = m.BadWords, FileInfo = fi[indexs[0]], ListSfi = m.ListSfi, CancellationToken = m.CancellationToken};
+                            ThreadPool.QueueUserWorkItem(a.AuditValidTwo, _m);
+                            indexs.RemoveAt(0);
+                            Thread.Sleep(50);
+                        }
+
+
+                    }
+                    catch
+                    {
+                        //
+                    }
+
+                    Incr:
+                    i++;
+                    //Debug.WriteLine($"{i} - {m.ListDir.Count} - {i == m.ListDir.Count}");
+                    if (m.CancellationToken.IsCancellationRequested || i == m.ListDir.Count) break;
+                }
+                m.UpdateUiSearchForm(new Msg() { CurrentFile = "Виконано", PrgBarFiles = i });
             }
         }
     }
@@ -302,10 +541,13 @@ namespace LibFileAudit
         public CancellationToken CancellationToken;
         public List<DirectoryInfo> ListDir;
         public List<SearchFileInfo> ListSfi;
+        public FileInfo FileInfo;
+        public long FileSizeBr;
         public int Index=-1;
         public int PrgBarFiles=-1;
         public string[] BadWords { get; set; }
         public string CurrentDirectory { get; set; }
+        public string CurrentFile { get; set; }
     }
     
 }

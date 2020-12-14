@@ -40,9 +40,9 @@ namespace File_audit
             this.button_UserAddWord = new System.Windows.Forms.Button();
             this.textBox_WordForAudit = new System.Windows.Forms.TextBox();
             this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.contextMenuStrip_ListWords = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsm_DeleteFromList = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonStart = new System.Windows.Forms.Button();
             this.groupBox_Properties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
@@ -155,6 +155,16 @@ namespace File_audit
             this.splitContainer_Main.SplitterDistance = 295;
             this.splitContainer_Main.TabIndex = 2;
             // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(17, 240);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(75, 23);
+            this.buttonStart.TabIndex = 2;
+            this.buttonStart.Text = "button_Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
+            // 
             // contextMenuStrip_ListWords
             // 
             this.contextMenuStrip_ListWords.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -168,16 +178,6 @@ namespace File_audit
             this.tsm_DeleteFromList.Size = new System.Drawing.Size(163, 22);
             this.tsm_DeleteFromList.Text = "Вилучити слово";
             this.tsm_DeleteFromList.Click += new System.EventHandler(this.tsm_DeleteFromList_Click);
-            // 
-            // buttonStart
-            // 
-            this.buttonStart.Location = new System.Drawing.Point(17, 240);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(75, 23);
-            this.buttonStart.TabIndex = 2;
-            this.buttonStart.Text = "button_Start";
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // MainF
             // 

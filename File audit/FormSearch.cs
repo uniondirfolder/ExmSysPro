@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -38,6 +39,7 @@ namespace File_audit
           
             InitializeComponent();
             Tm = new Msg() { ListDir = _ldi, CancellationToken = _token, UpdateUiSearchForm = _updateUi, ListSfi = _sfi, BadWords = _arrWords.ToArray() };
+           
         }
 
         private void UpdateFace(object obj)
@@ -53,48 +55,83 @@ namespace File_audit
                 {
                     label_CurentDir.Text = "";
                     label_CurentDir.Text = m.Index + " | " + m.CurrentDirectory;
-                    progressBarFileScan.Maximum = m.Index;
-                    progressBar_Directory.Value = 1;
                 }
                 else if (m.PrgBarFiles > -1)
                 {
-                    progressBarFileScan.Value = m.PrgBarFiles;
 
+                        progressBarFileScan.Value = m.PrgBarFiles;
+                    
+                    
+                    label_FileScan.Text = "";
+                    label_FileScan.Text = m.PrgBarFiles + " | " + m.CurrentFile;
                 }
-            }
-        }
 
-        private void Start()
-        {
-            Task<List<DirectoryInfo>> t = new Task<List<DirectoryInfo>>(()=> Audit.ScanDirsOnDisk(_disk,_token,_updateUi));
-            t.Start();
+            }
         }
 
         private void button_Start_Click(object sender, EventArgs e)
         {
-            if (checkBox_BurnProc.Checked == true)
+            progressBar_Directory.Style= ProgressBarStyle.Marquee;
+            Msg m = new Msg()
             {
-                Start();
+                Disk = _disk,
+                ListDir = Tm.ListDir,
+                CancellationToken = Tm.CancellationToken,
+                UpdateUiSearchForm = Tm.UpdateUiSearchForm,
+                ListSfi = this.Tm.ListSfi,
+                BadWords = Tm.BadWords
+            };
+            if (checkBox_BurnProc.Checked)
+            {
+                ThreadPool.QueueUserWorkItem(Audit.ScanDirsAggressively, m);
             }
             else
             {
-                Msg m = new Msg() { ListDir = _ldi, CancellationToken = _token, UpdateUiSearchForm = _updateUi, Disk = _disk };
-                ThreadPool.QueueUserWorkItem(_audit.ScanDir, m);
+                ThreadPool.QueueUserWorkItem(Audit.ScanDirsLight, m);
             }
-            Thread.Sleep(1000);
-            ScanFile();
         }
 
         private void button_Stop_Click(object sender, EventArgs e)
         {
             _cancelTokenSource.Cancel();
+            progressBar_Directory.Style = ProgressBarStyle.Continuous;
+            progressBar_Directory.Value = 0;
+            progressBarFileScan.Value = 0;
+            
         }
 
-        private void ScanFile()
+        private void ScanFileLight()
         {
- 
-            Msg _m = new Msg() { ListDir = Tm.ListDir, CancellationToken = Tm.CancellationToken, UpdateUiSearchForm = Tm.UpdateUiSearchForm, ListSfi = this.Tm.ListSfi, BadWords = Tm.BadWords };
-            ThreadPool.QueueUserWorkItem(_audit.ScanFiles, _m);
+            progressBarFileScan.Maximum = _ldi.Count;
+            progressBar_Directory.Value = 0;
+
+            Msg _m = new Msg()
+            {
+                ListDir = Tm.ListDir,
+                CancellationToken = Tm.CancellationToken,
+                UpdateUiSearchForm = Tm.UpdateUiSearchForm,
+                ListSfi = this.Tm.ListSfi,
+                BadWords = Tm.BadWords,
+                FileSizeBr = long.Parse(numericUpDown_FileSizeIgnore.Value.ToString(CultureInfo.InvariantCulture)) * (long)Audit.FileSizeInBit.MBbt
+            };
+            ThreadPool.QueueUserWorkItem(Audit.ScanFileLight, _m);
+            
+
+        }
+        private void ScanFileAggressively()
+        {
+            progressBarFileScan.Maximum = _ldi.Count;
+            progressBar_Directory.Value = 0;
+            Msg _m = new Msg()
+            {
+                ListDir = Tm.ListDir, 
+                CancellationToken = Tm.CancellationToken,
+                UpdateUiSearchForm = Tm.UpdateUiSearchForm,
+                ListSfi = this.Tm.ListSfi,
+                BadWords = Tm.BadWords,
+                FileSizeBr = long.Parse(numericUpDown_FileSizeIgnore.Value.ToString(CultureInfo.InvariantCulture))*(long)Audit.FileSizeInBit.MBbt
+            };
+            ThreadPool.QueueUserWorkItem(Audit.ScanFilesAggressively, _m);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -102,11 +139,46 @@ namespace File_audit
             FolderBrowserDialog f = new FolderBrowserDialog();
             if (f.ShowDialog() == DialogResult.OK)
             {
+                progressBar_Directory.Style = ProgressBarStyle.Marquee;
+                Msg _m = new Msg()
+                {
+                    ListDir = Tm.ListDir, 
+                    CancellationToken = Tm.CancellationToken,
+                    UpdateUiSearchForm = Tm.UpdateUiSearchForm,
+                    Disk = f.SelectedPath,
+                    ListSfi = this.Tm.ListSfi,
+                    BadWords = Tm.BadWords
+                };
+                if (checkBox_BurnProc.Checked) { ThreadPool.QueueUserWorkItem(Audit.ScanDirsAggressively, _m); }
+                else { ThreadPool.QueueUserWorkItem(Audit.ScanDirsLight, _m); }
+                
+            }
+        }
 
-                Msg _m = new Msg() { ListDir = Tm.ListDir, CancellationToken = Tm.CancellationToken, UpdateUiSearchForm = Tm.UpdateUiSearchForm, Disk = f.SelectedPath, ListSfi = this.Tm.ListSfi, BadWords = Tm.BadWords};
-                ThreadPool.QueueUserWorkItem(_audit.ScanDir, _m);
-                Thread.Sleep(1000);
-                ScanFile();
+        private void label_CurentDir_TextChanged(object sender, EventArgs e)
+        {
+
+            if (label_CurentDir.Text.Contains("Виконано"))
+            {
+                progressBar_Directory.Enabled = false;
+                progressBar_Directory.Style = ProgressBarStyle.Continuous;
+                progressBar_Directory.Value = 0;
+                if (checkBox_BurnProc.Checked)
+                {
+                    ScanFileAggressively();
+                }
+                else
+                {
+                   ScanFileLight();
+                }
+            }
+        }
+
+        private void label_FileScan_TextChanged(object sender, EventArgs e)
+        {
+            if(label_FileScan.Text.Contains("Виконано"))
+            {
+                progressBarFileScan.Value = 0;
             }
         }
     }
